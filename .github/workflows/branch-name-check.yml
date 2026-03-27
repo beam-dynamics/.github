@@ -1,0 +1,30 @@
+name: Branch Name Check (Shared)
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: "The branch name to validate"
+        required: true
+        type: string
+
+jobs:
+  check:
+    name: Validate branch name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        run: |
+          BRANCH="${{ inputs.branch }}"
+          if [[ "$BRANCH" == "develop" || "$BRANCH" == "staging" || "$BRANCH" == "master" ]]; then
+            echo "✅ Main branch '$BRANCH' — skipping name check."
+            exit 0
+          fi
+          PATTERN="^(feature|fix|hotfix|chore|ci|test|release)/.+"
+          if [[ ! "$BRANCH" =~ $PATTERN ]]; then
+            echo "❌ Branch name '$BRANCH' is invalid."
+            echo "Branch names must start with one of: feature/, fix/, hotfix/, chore/, ci/, test/, release/"
+            exit 1
+          fi
+          echo "✅ Branch name '$BRANCH' is valid."
+
