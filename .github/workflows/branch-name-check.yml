@@ -20,10 +20,11 @@ jobs:
             echo "✅ Main branch '$BRANCH' — skipping name check."
             exit 0
           fi
-          PATTERN="^(feature|bugfix|fix|hotfix|chore|ci|test|release)/.+"
+          PATTERN="^(feature|bugfix|fix|hotfix|chore|ci|test|release)/\[BM-[0-9]{4}\].+"
           if [[ ! "$BRANCH" =~ $PATTERN ]]; then
             echo "❌ Branch name '$BRANCH' is invalid."
             echo "Branch names must start with one of: /bugifx, feature/, fix/, hotfix/, chore/, ci/, test/, release/"
+            echo "Followed by BM-*. Example: feat/BM-1253-new-feature"
             exit 1
           fi
           echo "✅ Branch name '$BRANCH' is valid."
